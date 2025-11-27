@@ -1,0 +1,195 @@
+﻿<Window x:Class="PetCatalogApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PetCatalogApp"
+        mc:Ignorable="d"
+        Title="Каталог домашніх улюбленців" Height="615" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundColor}">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0">
+
+            <TabItem Header="Список Власників">
+                <Grid>
+                    <DataGrid ItemsSource="{Binding Owners}" SelectedItem="{Binding SelectedOwner}" 
+                              AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                            <DataGridTextColumn Header="ПІБ" Binding="{Binding FullName}" Width="Auto"/>
+                            <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" Width="150"/>
+                            <DataGridTextColumn Header="Адреса" Binding="{Binding Address}" Width="200"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Каталог Тварин">
+                <Grid>
+                    <DataGrid ItemsSource="{Binding Pets}" SelectedItem="{Binding SelectedPet}" 
+                              AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                            <DataGridTextColumn Header="Кличка" Binding="{Binding Name}" Width="150"/>
+                            <DataGridTextColumn Header="Вид" Binding="{Binding Species}" Width="100"/>
+                            <DataGridTextColumn Header="Порода" Binding="{Binding Breed}" Width="150"/>
+                            <DataGridTextColumn Header="Вік" Binding="{Binding Age}" Width="60"/>
+                            <DataGridTextColumn Header="Власник" Binding="{Binding Owner.FullName}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Управління">
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="1.2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <GroupBox Grid.Column="0" Header="Дані Власника" VerticalAlignment="Stretch">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0">
+                                <TextBlock Text="ПІБ" Foreground="Gray" Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding EditableOwner.FullName}" Margin="0,0,0,15"/>
+
+                                <TextBlock Text="Телефон" Foreground="Gray" Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding EditableOwner.PhoneNumber}" Margin="0,0,0,15"/>
+
+                                <TextBlock Text="Адреса" Foreground="Gray" Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding EditableOwner.Address}" Margin="0,0,0,15"/>
+
+                                <Border BorderThickness="0,1,0,0" BorderBrush="#E5E7EB" Margin="0,10,0,10" Padding="0,10,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Швидкий вибір (редагувати/видалити):" FontSize="11" Foreground="Gray" Margin="0,0,0,5"/>
+                                        <ComboBox ItemsSource="{Binding Owners}" 
+                                                  SelectedItem="{Binding SelectedOwner}"
+                                                  DisplayMemberPath="FullName"
+                                                  Padding="6" Margin="0,0,0,5"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                <Button Content="Додати" Margin="5" Click="AddOwner_Click" Width="Auto"/>
+                                <Button Content="Оновити" Margin="5" Click="UpdateOwner_Click" 
+                                        Style="{StaticResource SecondaryButtonStyle}" Width="Auto"/>
+                                <Button Content="Видалити" Margin="5" Click="DeleteOwner_Click" 
+                                        Style="{StaticResource DangerButtonStyle}" Width="Auto"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Grid.Column="2" Header="Дані Тварини" VerticalAlignment="Stretch">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Кличка:" Margin="0,5" Grid.Row="0" VerticalAlignment="Center" Foreground="Gray"/>
+                                <TextBox Text="{Binding EditablePet.Name}" Margin="10,5,0,5" Grid.Row="0" Grid.Column="1"/>
+
+                                <TextBlock Text="Вид:" Margin="0,5" Grid.Row="1" VerticalAlignment="Center" Foreground="Gray"/>
+                                <TextBox Text="{Binding EditablePet.Species}" Margin="10,5,0,5" Grid.Row="1" Grid.Column="1"/>
+
+                                <TextBlock Text="Порода:" Margin="0,5" Grid.Row="2" VerticalAlignment="Center" Foreground="Gray"/>
+                                <TextBox Text="{Binding EditablePet.Breed}" Margin="10,5,0,5" Grid.Row="2" Grid.Column="1"/>
+
+                                <TextBlock Text="Вік:" Margin="0,5" Grid.Row="3" VerticalAlignment="Center" Foreground="Gray"/>
+                                <TextBox Text="{Binding EditablePet.Age}" Margin="10,5,0,5" Grid.Row="3" Grid.Column="1"/>
+
+                                <TextBlock Text="Вага:" Margin="0,5" Grid.Row="4" VerticalAlignment="Center" Foreground="Gray"/>
+                                <TextBox Text="{Binding EditablePet.Weight}" Margin="10,5,0,5" Grid.Row="4" Grid.Column="1"/>
+
+                                <TextBlock Text="Власник:" Margin="0,5" Grid.Row="5" VerticalAlignment="Center" Foreground="Gray"/>
+                                <ComboBox ItemsSource="{Binding Owners}" 
+                                          SelectedValue="{Binding EditablePet.OwnerId}"
+                                          SelectedValuePath="Id"
+                                          DisplayMemberPath="FullName"
+                                          Margin="10,5,0,5" Grid.Row="5" Grid.Column="1" Height="35"/>
+
+                                <Border Grid.Row="6" Grid.ColumnSpan="2" BorderThickness="0,1,0,0" BorderBrush="#E5E7EB" Margin="0,15,0,0" Padding="0,10,0,0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Швидкий вибір:" VerticalAlignment="Center" FontSize="11" Foreground="Gray"/>
+                                        <ComboBox Grid.Column="1" Margin="10,0,0,0"
+                                                  ItemsSource="{Binding Pets}" 
+                                                  SelectedItem="{Binding SelectedPet}"
+                                                  DisplayMemberPath="Name"
+                                                  Padding="6"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                <Button Content="Додати" Margin="5" Click="AddPet_Click" Width="Auto"/>
+                                <Button Content="Оновити" Margin="5" Click="UpdatePet_Click" 
+                                        Style="{StaticResource SecondaryButtonStyle}" Width="Auto"/>
+                                <Button Content="Видалити" Margin="5" Click="DeletePet_Click" 
+                                        Style="{StaticResource DangerButtonStyle}" Width="Auto"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Звіти">
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0" Text="{Binding StatisticsText}" 
+                             IsReadOnly="True" VerticalScrollBarVisibility="Auto" 
+                             FontSize="14" FontFamily="Consolas" Padding="15" BorderThickness="0"/>
+
+                    <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
+                        <Button Content="📊 Оновити статистику" Margin="0,0,0,15" Click="CalcStats_Click"/>
+                        <Button Content="💾 Експорт: Молоді коти" Click="ExportCats_Click" Background="#10B981"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <Border Grid.Row="1" Background="#E5E7EB" CornerRadius="4" Margin="0,5,0,0" Padding="10,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Статус: " FontWeight="Bold" Foreground="#6B7280"/>
+                <TextBlock Text="{Binding StatusMessage}" Foreground="#374151"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
